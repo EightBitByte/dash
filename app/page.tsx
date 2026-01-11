@@ -1,7 +1,6 @@
 import { DashboardShell } from "@/components/dashboard-shell";
 import { Header } from "@/components/header";
 import { ArcGymWidget } from "@/components/widgets/arc-gym-widget";
-import { CalendarWidget } from "@/components/widgets/calendar-widget";
 import { DeadlinesWidget } from "@/components/widgets/deadlines-widget";
 import { DealsWidget } from "@/components/widgets/deals-widget";
 import { GithubIssuesWidget } from "@/components/widgets/github-issues-widget";
@@ -16,7 +15,6 @@ export default function Home() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <WeatherWidget />
           <ArcGymWidget />
-          <CalendarWidget />
 
           <GithubIssuesWidget />
           <DealsWidget />

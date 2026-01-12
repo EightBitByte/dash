@@ -26,7 +26,7 @@ export async function ArcGymWidget() {
         </Button>
       }
     >
-      <ScrollArea className="h-[200px] pr-4">
+      <ScrollArea className="pr-4">
         <div className="space-y-4 text-sm">
           <div>
             <h4 className="font-semibold mb-2">Regular Hours</h4>

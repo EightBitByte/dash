@@ -1,4 +1,4 @@
-import Parser from "rss-parser";
+import { load } from "cheerio";
 
 export interface DealItem {
   id: string;
@@ -8,35 +8,46 @@ export interface DealItem {
   date?: string;
 }
 
-const SlickdealsParser = new Parser({
-  customFields: {
-    item: ["media:content", "content:encoded"],
-  },
-});
-
 export async function getDeals(): Promise<DealItem[]> {
   try {
     // Tech deals feed
     const FEED_URL =
       "https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&sort=newest&q=tech&rss=1";
-    const feed = await SlickdealsParser.parseURL(FEED_URL);
 
-    return feed.items
-      .map((item) => {
-        // Attempt to extract image from content or description
-        const content = item["content:encoded"] || item.content || "";
-        const imgMatch = content.match(/src="([^"]+)"/);
-        const image = imgMatch ? imgMatch[1] : undefined;
+    const response = await fetch(FEED_URL);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch deals: ${response.statusText}`);
+    }
+    const xml = await response.text();
+    const $ = load(xml, { xmlMode: true });
 
-        return {
-          id: item.guid || item.link || Math.random().toString(),
-          title: item.title || "Unknown Deal",
-          url: item.link || "#",
-          image,
-          date: item.pubDate,
-        };
-      })
-      .slice(0, 5);
+    const items: DealItem[] = [];
+
+    $("item").each((_, element) => {
+      const item = $(element);
+      const title = item.find("title").text();
+      const link = item.find("link").text();
+      const guid = item.find("guid").text();
+      const pubDate = item.find("pubDate").text();
+      const contentEncoded = item.find("content\\:encoded").text(); // cheerio handles namespaced tags
+      const description = item.find("description").text();
+
+      // Attempt to extract image from content or description
+      const content = contentEncoded || description || "";
+      const imgMatch = content.match(/src="([^"]+)"/);
+      const image = imgMatch ? imgMatch[1] : undefined;
+
+      items.push({
+        id: guid || link || Math.random().toString(),
+        title: title || "Unknown Deal",
+        url: link || "#",
+        image,
+        date: pubDate
+      });
+    });
+
+    return items.slice(0, 5);
+
   } catch (error) {
     console.error("Error fetching Slickdeals:", error);
     return [];

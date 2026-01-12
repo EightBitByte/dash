@@ -1,11 +1,10 @@
-import { WidgetCard } from "@/components/widget-card";
+import { getDeadlinesAction } from "@/app/actions/deadlines";
+import { DeadlinesInteractive } from "./deadlines-interactive";
 
-export function DeadlinesWidget() {
+export async function DeadlinesWidget() {
+  const deadlines = await getDeadlinesAction();
+
   return (
-    <WidgetCard title="Upcoming Deadlines">
-      <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-        Manual deadlines list will appear here.
-      </div>
-    </WidgetCard>
+    <DeadlinesInteractive initialDeadlines={deadlines} />
   );
 }

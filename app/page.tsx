@@ -4,7 +4,6 @@ import { ArcGymWidget } from "@/components/widgets/arc-gym-widget";
 import { DeadlinesWidget } from "@/components/widgets/deadlines-widget";
 import { DealsWidget } from "@/components/widgets/deals-widget";
 import { GithubIssuesWidget } from "@/components/widgets/github-issues-widget";
-import { NewsFeedWidget } from "@/components/widgets/news-feed-widget";
 import { WeatherWidget } from "@/components/widgets/weather-widget";
 
 export default function Home() {
@@ -19,8 +18,6 @@ export default function Home() {
           <GithubIssuesWidget />
           <DealsWidget />
           <DeadlinesWidget />
-
-          <NewsFeedWidget />
         </div>
       </DashboardShell>
     </div>

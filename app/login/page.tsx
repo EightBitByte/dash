@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +24,8 @@ export default function LoginPage() {
     const result = await login(formData);
     if (result?.error) {
       setError(result.error);
+    } else if (result?.success) {
+      window.location.href = "/";
     }
   }
 

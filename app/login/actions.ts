@@ -22,5 +22,6 @@ export async function login(formData: FormData) {
     maxAge: 60 * 60 * 24, // 24 hours
   });
 
-  redirect("/");
+  // Redirect removed to allow client-side window.location.href
+  return { success: true };
 }

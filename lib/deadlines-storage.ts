@@ -1,4 +1,3 @@
-
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Book, Briefcase, Calendar, User } from "lucide-react";
 
@@ -22,8 +21,10 @@ const STORAGE_KEY = "deadlines.json";
 
 export async function getStoredDeadlines(): Promise<DeadlineItem[]> {
   try {
+    console.log("Fetching deadlines from R2...");
     const { env } = await getCloudflareContext({ async: true });
     const obj = await env.DASH_BUCKET.get(STORAGE_KEY);
+    console.log("R2 Fetch Result:", obj ? "Found" : "Null");
 
     if (!obj) {
       // Return default deadlines if empty
@@ -31,6 +32,7 @@ export async function getStoredDeadlines(): Promise<DeadlineItem[]> {
     }
 
     const text = await obj.text();
+    console.log("R2 Content:", text);
     return JSON.parse(text) as DeadlineItem[];
   } catch (error) {
     console.error("Failed to fetch deadlines from R2:", error);
@@ -39,6 +41,12 @@ export async function getStoredDeadlines(): Promise<DeadlineItem[]> {
 }
 
 export async function saveStoredDeadlines(deadlines: DeadlineItem[]) {
-  const { env } = await getCloudflareContext({ async: true });
-  await env.DASH_BUCKET.put(STORAGE_KEY, JSON.stringify(deadlines));
+  try {
+    console.log("Saving deadlines to R2...", JSON.stringify(deadlines));
+    const { env } = await getCloudflareContext({ async: true });
+    await env.DASH_BUCKET.put(STORAGE_KEY, JSON.stringify(deadlines));
+    console.log("Save successful!");
+  } catch (error) {
+    console.error("Failed to save deadlines to R2:", error);
+  }
 }

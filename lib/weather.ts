@@ -10,20 +10,12 @@ export interface WeatherData {
 }
 
 export async function getWeather(): Promise<WeatherData> {
+  // Use try/catch to handle build-time fetch failures nicely
   try {
-    const params = new URLSearchParams({
-      latitude: "33.6846",
-      longitude: "-117.8265",
-      current: "temperature_2m,weather_code",
-      daily: "temperature_2m_max,temperature_2m_min",
-      temperature_unit: "fahrenheit",
-      timezone: "auto",
-      forecast_days: "1",
-    });
-
+    const latitude = "33.6846";
+    const longitude = "-117.8265";
     const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?${params.toString()}`,
-      { next: { revalidate: 1800 } }, // Cache for 30 minutes
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles`,
     );
 
     if (!res.ok) {
@@ -38,13 +30,13 @@ export async function getWeather(): Promise<WeatherData> {
         weatherCode: data.current.weather_code,
       },
       daily: {
-        min: Math.round(data.daily.temperature_2m_min[0]),
         max: Math.round(data.daily.temperature_2m_max[0]),
+        min: Math.round(data.daily.temperature_2m_min[0]),
       },
     };
   } catch (error) {
-    console.error("Error fetching weather:", error);
-    // Return fallback data
+    console.warn("Weather fetch failed (using fallback data):", error);
+    // Return fallback data so build doesn't crash
     return {
       current: { temperature: 72, weatherCode: 1 },
       daily: { min: 65, max: 75 },

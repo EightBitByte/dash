@@ -9,32 +9,38 @@
     "nodejs_compat",
     // Allow to fetch URLs in your app
     // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
-    "global_fetch_strictly_public",
+    "global_fetch_strictly_public"
   ],
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS",
+    "binding": "ASSETS"
   },
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
       // The service should match the "name" of your worker
-      "service": "dash",
-    },
+      "service": "dash"
+    }
   ],
   "r2_buckets": [
     {
       "binding": "DASH_BUCKET",
-      "bucket_name": "dash-bucket",
+      "bucket_name": "dash-bucket"
     },
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "dash-inc-cache",
+      "bucket_name": "dash-inc-cache"
     }
   ],
   "images": {
     // Enable image optimization
     // see https://opennext.js.org/cloudflare/howtos/image
-    "binding": "IMAGES",
+    "binding": "IMAGES"
   },
+  "routes": [
+    {
+      "pattern": "dash.jacobmoy.com",
+      "custom_domain": true
+    }
+  ]
 }

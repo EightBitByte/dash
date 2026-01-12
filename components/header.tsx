@@ -1,14 +1,12 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
+import { useState } from "react";
 import { logout } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
-  const redirectBackToLogin = () => {
-    // Force a hard navigation to the login page to ensure fresh assets are loaded
-    window.location.href = "/login";
-  };
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -18,21 +16,30 @@ export function Header() {
         </div>
         <div className="flex items-center gap-2">
           <Button
+            type="button"
             variant="ghost"
             size="sm"
-            onClick={async () => {
-              try {
-                await logout();
-              } catch (e) {
-                console.error("Logout action failed:", e);
-              } finally {
-                redirectBackToLogin();
-              }
+            disabled={isLoggingOut}
+            onClick={() => {
+              setIsLoggingOut(true);
+              const start = Date.now();
+              console.log("Navigating to login via hard redirect...");
+
+              logout().then(() => {
+                console.log(
+                  `Cookie deleted in ${Date.now() - start}ms, redirecting now.`,
+                );
+                window.location.assign("/login");
+              });
             }}
             className="text-muted-foreground hover:text-foreground"
           >
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
+            {isLoggingOut ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <LogOut className="mr-2 h-4 w-4" />
+            )}
+            {isLoggingOut ? "Logging out..." : "Logout"}
           </Button>
         </div>
       </div>

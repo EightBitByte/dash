@@ -6,6 +6,8 @@ import { DealsWidget } from "@/components/widgets/deals-widget";
 import { GithubIssuesWidget } from "@/components/widgets/github-issues-widget";
 import { WeatherWidget } from "@/components/widgets/weather-widget";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">

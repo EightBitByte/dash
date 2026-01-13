@@ -14,7 +14,7 @@ export async function getDeals(): Promise<DealItem[]> {
     const FEED_URL =
       "https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&sort=newest&q=tech&rss=1";
 
-    const response = await fetch(FEED_URL);
+    const response = await fetch(FEED_URL, { next: { revalidate: 3600 } });
     if (!response.ok) {
       throw new Error(`Failed to fetch deals: ${response.statusText}`);
     }
@@ -42,12 +42,11 @@ export async function getDeals(): Promise<DealItem[]> {
         title: title || "Unknown Deal",
         url: link || "#",
         image,
-        date: pubDate
+        date: pubDate,
       });
     });
 
     return items.slice(0, 5);
-
   } catch (error) {
     console.error("Error fetching Slickdeals:", error);
     return [];

@@ -34,7 +34,17 @@ export async function getGithubItems(): Promise<{
       return { prs: [], issues: [] };
     }
 
-    const octokit = new Octokit({ auth: token });
+    const octokit = new Octokit({
+      auth: token,
+      request: {
+        fetch: (url: any, options: any) => {
+          return fetch(url, {
+            ...options,
+            next: { revalidate: 900 },
+          });
+        },
+      },
+    });
     const username = process.env.GITHUB_USERNAME || "@me";
 
     // Search query:

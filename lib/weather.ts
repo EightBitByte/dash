@@ -16,6 +16,7 @@ export async function getWeather(): Promise<WeatherData> {
     const longitude = "-117.8265";
     const res = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles`,
+      { next: { revalidate: 900 } },
     );
 
     if (!res.ok) {

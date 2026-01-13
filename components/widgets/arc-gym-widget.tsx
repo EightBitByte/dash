@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { RefreshButton } from "@/components/refresh-button";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { WidgetCard } from "@/components/widget-card";
@@ -13,17 +14,20 @@ export async function ArcGymWidget() {
       title="ARC Gym Hours"
       className="row-span-2"
       action={
-        <Button variant="ghost" size="icon" asChild className="h-6 w-6">
-          <Link
-            href="https://www.campusrec.uci.edu/arc/hours.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="View official hours"
-          >
-            <ExternalLink className="h-4 w-4 text-muted-foreground" />
-            <span className="sr-only">View official hours</span>
-          </Link>
-        </Button>
+        <div className="flex items-center gap-1">
+          <RefreshButton />
+          <Button variant="ghost" size="icon" asChild className="h-6 w-6">
+            <Link
+              href="https://www.campusrec.uci.edu/arc/hours.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="View official hours"
+            >
+              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+              <span className="sr-only">View official hours</span>
+            </Link>
+          </Button>
+        </div>
       }
     >
       <ScrollArea className="pr-4">

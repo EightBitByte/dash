@@ -12,6 +12,7 @@ import {
   Thermometer,
 } from "lucide-react";
 import Link from "next/link";
+import { RefreshButton } from "@/components/refresh-button";
 import { Button } from "@/components/ui/button";
 import { WidgetCard } from "@/components/widget-card";
 import { getWeather, getWeatherIcon } from "@/lib/weather";
@@ -38,17 +39,20 @@ export async function WeatherWidget() {
     <WidgetCard
       title="Weather"
       action={
-        <Button variant="ghost" size="icon" asChild className="h-6 w-6">
-          <Link
-            href="https://weather.com/weather/today/l/33.6846,-117.8265"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="View on Weather.com"
-          >
-            <ExternalLink className="h-4 w-4 text-muted-foreground" />
-            <span className="sr-only">View on Weather.com</span>
-          </Link>
-        </Button>
+        <div className="flex items-center gap-1">
+          <RefreshButton />
+          <Button variant="ghost" size="icon" asChild className="h-6 w-6">
+            <Link
+              href="https://weather.com/weather/today/l/33.6846,-117.8265"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="View on Weather.com"
+            >
+              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+              <span className="sr-only">View on Weather.com</span>
+            </Link>
+          </Button>
+        </div>
       }
     >
       <div className="flex h-full flex-col justify-between py-2">
